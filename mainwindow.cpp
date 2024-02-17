@@ -114,7 +114,7 @@ MainWindow::MainWindow(QWidget* parent)
   ui->actionGenerate->setEnabled(true);
   mac = true;
 
-#if (QT_VERSION <= QT_VERSION_CHECK(5, 15, 0))
+#if (QT_VERSION <= QT_VERSION_CHECK(5, 15, 9))
   osx1012 = true;
   mac = false;
 #endif
@@ -1363,6 +1363,8 @@ void MainWindow::mem_linkage(QTreeWidget* tw, int RowNum) {
 }
 
 /*行号区域的宽度：目前在主编辑框内已弃用，为编译输出信息显示预留*/
+//Ширина области номера строки: в настоящее время не поддерживается в главном поле редактирования,
+//зарезервирована для отображения выходной информации компиляции.
 int CodeEditor::lineNumberAreaWidth() {
   int digits = 1;
   int max = qMax(1, blockCount());
@@ -1371,7 +1373,7 @@ int CodeEditor::lineNumberAreaWidth() {
     ++digits;
   }
 
-  return 0;
+  return digits;
 }
 
 void CodeEditor::updateLineNumberAreaWidth(int /* newBlockCount */) {
@@ -1540,12 +1542,12 @@ void MainWindow::on_btnFindPrevious() {
   QScrollBar* hscrollbar = new QScrollBar;
   hscrollbar = textEdit->horizontalScrollBar();
 
-  int row, col, vs_pos, hs_pos;
+  int row, col, vs_pos; //, hs_pos;
   vs_pos = vscrollbar->sliderPosition();
   textEdit->getCursorPosition(&row, &col);
   if (row < vs_pos) vscrollbar->setSliderPosition(row - 5);
 
-  hs_pos = hscrollbar->sliderPosition();
+//  hs_pos = hscrollbar->sliderPosition();
   QPainter p(this);
   QFontMetrics fm = p.fontMetrics();
   QString t = textEdit->text(row).mid(0, col);
@@ -5829,11 +5831,12 @@ void MainWindow::highlighsearchtext(QString searchText, QsciScintilla* textEdit,
 
   //查找document中flag
   //出现的所有位置,采用标准字符串来计算，QString会有一些问题
+  //Все отображаемые позиции рассчитываются с использованием стандартных строк.У QString возникнут некоторые проблемы.
   std::string flag = search_string.toStdString();
 
   unsigned long long position = 0;
 
-  int i = 1;
+ // int i = 1;
   while ((position = document.find(flag, position)) != std::string::npos &&
          !isBreakFind) {
     textEdit->SendScintilla(QsciScintilla::SCI_INDICATORFILLRANGE, position,
@@ -5842,7 +5845,7 @@ void MainWindow::highlighsearchtext(QString searchText, QsciScintilla* textEdit,
     m_searchTextPosList.append(position);
 
     position++;
-    i++;
+//    i++;
   }
 
   curFindPos = m_searchTextPosList.count();
@@ -5852,7 +5855,7 @@ void MainWindow::highlighsearchtext(QString searchText, QsciScintilla* textEdit,
     clearSearchHighlight(textEdit);
   }
 
-  // 结果列表
+  // 结果列表 - Список результатов
   if (!addTreeItem) return;
   int count = m_searchTextPosList.count();
   if (count == 0) return;
@@ -6236,11 +6239,11 @@ void MiniEditor::showZoomWin(int x, int y) {
   else
     y1 = y;
 
-  int w0 = 0;
-  if (mw_one->mac || mw_one->osx1012)
-    w0 = 6;
-  else
-    w0 = 2;
+//  int w0 = 0;
+//  if (mw_one->mac || mw_one->osx1012)
+//    w0 = 6;
+//  else
+//    w0 = 2;
 
   miniDlg->setGeometry(mw_one->ui->dockMiniEdit->x() - w - 1, y1, w, h);
 
