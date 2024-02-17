@@ -4102,12 +4102,12 @@ void MainWindow::init_recentFiles() {
   m_ssdtFiles = new RecentFiles(this);
   m_ssdtFiles->setTitle(tr("Current SSDT List"));
 
-  if (!linuxOS) {
-    m_ssdtFiles->attachToMenuAfterItem(
-        ui->menu_Edit, tr("Generate ACPI tables"), SLOT(recentOpen(QString)));
-
-    getACPITables(true);  //获取SSDT列表
-  }
+//  if (!linuxOS) {
+//    m_ssdtFiles->attachToMenuAfterItem(
+//        ui->menu_Edit, tr("Generate ACPI tables"), SLOT(recentOpen(QString)));
+//
+//    getACPITables(true);  //获取SSDT列表
+//  }
 }
 
 void MainWindow::init_Tool_UI() {
